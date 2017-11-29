@@ -62,6 +62,12 @@ Vector3D::Vector3D(const Vector3D& other) {
 	m_data[2] = other.m_data[2];
 }
 
+Vector3D::Vector3D(const Point3D& other) {
+	m_data[0] = other[0];
+	m_data[1] = other[1];
+	m_data[2] = other[2];
+}
+
 Vector3D& Vector3D::operator =(const Vector3D& other) {
 	m_data[0] = other.m_data[0];
 	m_data[1] = other.m_data[1];
@@ -79,6 +85,11 @@ double Vector3D::operator[](int i) const {
 double Vector3D::length() const
 {
 	return sqrt(dot(*this));
+}
+
+double Vector3D::lengthsq() const
+{
+	return dot(*this);
 }
 
 double Vector3D::normalize() {
