@@ -12,21 +12,53 @@
 #include <iostream>
 #include "scene_object.h"
 
+/**
+* Intersection code for UnitSquare, which is defined on the xy-plane, with
+* vertices (0.5, 0.5, 0), (-0.5, 0.5, 0), (-0.5, -0.5, 0), (0.5, -0.5, 0), and
+* normal (0, 0, 1).
+*
+* @param ray The ray to check intersection for
+* @param worldToModel The transformation matrix taking points from world space to sphere space
+* @param modelToWorld The transformation matrix taking points from sphere space to world space
+* @return true if the ray's intersection was overwritten, false otherwise
+*/
 bool UnitSquare::intersect( Ray3D& ray, const Matrix4x4& worldToModel,
-		const Matrix4x4& modelToWorld ) {
-	// TODO: implement intersection code for UnitSquare, which is
-	// defined on the xy-plane, with vertices (0.5, 0.5, 0), 
-	// (-0.5, 0.5, 0), (-0.5, -0.5, 0), (0.5, -0.5, 0), and normal
-	// (0, 0, 1).
-	//
-	// Your goal here is to fill ray.intersection with correct values
-	// should an intersection occur.  This includes intersection.point, 
-	// intersection.normal, intersection.none, intersection.t_value.   
-	//
-	// HINT: Remember to first transform the ray into object space  
-	// to simplify the intersection test.
+        const Matrix4x4& modelToWorld ) {
 
-	return false;
+    // transform ray into object space
+    Point3D origin_model = worldToModel * ray.origin;
+    Vector3D dir_model = worldToModel * ray.dir;
+
+    // handle case where the ray is parallel with the xy-plane
+    // no need for epsilon here; small z values handled in calculation of intersection
+    if (dir_model[2] == 0.0) {
+        return false;
+    }
+
+    // compute the ray's (singular) intersection with the xy-plane
+    double t_model = -origin_model[2] / dir_model[2];
+    Point3D p_intersect = origin_model + t_model * dir_model;
+
+    // check if the point of intersection lies within the unit square
+    if (abs(p_intersect[0]) > 0.5 || abs(p_intersect[1]) > 0.5) {
+        return false;
+    }
+
+    // apply world transformation to intersection point and t-value
+    p_intersect = modelToWorld * p_intersect;
+    double t_world = (p_intersect - ray.origin)[0] / ray.dir[0];
+
+    // check against prior intersection
+    if (!ray.intersection.none && t_world >= ray.intersection.t_value) {
+        return false;
+    }
+
+    // fill in intersection struct
+    ray.intersection.none = false;
+    ray.intersection.t_value = t_world;
+    ray.intersection.point = p_intersect;
+    ray.intersection.normal = transNorm(worldToModel, Vector3D(0, 0, 1));
+    return true;
 }
 
 /**
