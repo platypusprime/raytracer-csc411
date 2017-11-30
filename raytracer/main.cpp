@@ -62,12 +62,26 @@ int main(int argc, char* argv[])
 
 	// Render the scene, feel free to make the image smaller for
 	// testing purposes.	
-	raytracer.render(width, height, eye, view, up, fov, "view1.bmp");
+	raytracer.render(width, height, eye, view, up, fov, "phong1.bmp");
 
 	// Render it from a different point of view.
 	Point3D eye2(4, 2, 1);
 	Vector3D view2(-4, -2, -6);
-	raytracer.render(width, height, eye2, view2, up, fov, "view2.bmp");
+	raytracer.render(width, height, eye2, view2, up, fov, "phong2.bmp");
+
+	// Render without specular component (diffuse)
+	gold.specular = Colour();
+	jade.specular = Colour();
+	raytracer.render(width, height, eye, view, up, fov, "diffuse1.bmp");
+	raytracer.render(width, height, eye2, view2, up, fov, "diffuse2.bmp");
+
+	// Render with only ambient component (scene signature)
+	gold.ambient = gold.diffuse;
+	gold.diffuse = Colour();
+	jade.ambient = jade.diffuse;
+	jade.diffuse = Colour();
+	raytracer.render(width, height, eye, view, up, fov, "sig1.bmp");
+	raytracer.render(width, height, eye2, view2, up, fov, "sig2.bmp");
 
 	return 0;
 }
