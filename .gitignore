@@ -1,5 +1,10 @@
+*.zip
 *.pdf
 *.exe
-*.zip
+*.bmp
+*.VC.*
+
+**/Debug/*
+**/*BAK
+
 a3_tutorial_notes.txt
-*_BAK
