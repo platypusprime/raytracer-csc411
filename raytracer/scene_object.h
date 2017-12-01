@@ -10,6 +10,8 @@
 
 #include "util.h"
 
+#define EPSILON_T (0.001)
+
 // All primitives should provide a intersection function.
 // To create more primitives, inherit from SceneObject.
 // Namely, you can create, Sphere, Cylinder, etc... classes

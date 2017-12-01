@@ -49,7 +49,7 @@ bool UnitSquare::intersect( Ray3D& ray, const Matrix4x4& worldToModel,
     double t_world = (p_intersect - ray.origin)[0] / ray.dir[0];
 
     // check against prior intersection
-    if (!ray.intersection.none && t_world >= ray.intersection.t_value) {
+    if (t_world <= EPSILON_T || (!ray.intersection.none && t_world >= ray.intersection.t_value)) {
         return false;
     }
 
@@ -98,9 +98,9 @@ bool UnitSphere::intersect( Ray3D& ray, const Matrix4x4& worldToModel,
 
         // select intersection (note that t_pos is always larger than t_neg)
         double t_neg = 0.0, t_pos = 0.0;
-        if ((t_neg = -d_dot_o - t_plus_minus ) > 0) {
+        if ((t_neg = -d_dot_o - t_plus_minus ) > EPSILON_T) {
             t_model = t_neg;
-        } else if ((t_pos = -d_dot_o + t_plus_minus) > 0) {
+        } else if ((t_pos = -d_dot_o + t_plus_minus) > EPSILON_T) {
             t_model = t_pos;
         } else {
             return false; // all intersections are behind the ray origin
