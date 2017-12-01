@@ -200,15 +200,17 @@ void Raytracer::traverseScene( SceneDagNode* node, Ray3D& ray ) {
 }
 
 void Raytracer::computeShading( Ray3D& ray ) {
-    LightListNode* curLight = _lightSource;
-    for (;;) {
-        if (curLight == NULL) break;
+    for (LightListNode* curLight = _lightSource; curLight != NULL; curLight = curLight->next) {
         // Each lightSource provides its own shading function.
 
-        // Implement shadows here if needed.
+        // Shoot a ray directly towards light and check for occlusions
+        Ray3D shadowRay = Ray3D();
+        shadowRay.origin = ray.intersection.point;
+        shadowRay.dir = curLight->light->get_position() - ray.intersection.point;
+        traverseScene(_root, shadowRay);
+        bool isOccluded = !shadowRay.intersection.none;
 
-        curLight->light->shade(ray);
-        curLight = curLight->next;
+        curLight->light->shade(ray, isOccluded);
     }
 }
 
