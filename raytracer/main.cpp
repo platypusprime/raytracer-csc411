@@ -27,8 +27,10 @@ int main(int argc, char* argv[])
     }
 
     // Camera parameters.
-    Point3D eye(0, 0, 1);
-    Vector3D view(0, 0, -1);
+    Point3D eye1(0, 0, 1);
+    Point3D eye2(4, 2, 1);
+    Vector3D view1(0, 0, -1);
+    Vector3D view2(-4, -2, -6);
     Vector3D up(0, 1, 0);
     double fov = 60;
 
@@ -60,19 +62,20 @@ int main(int argc, char* argv[])
     raytracer.rotate(plane, 'z', 45);
     raytracer.scale(plane, Point3D(0, 0, 0), factor2);
 
-    // Render the scene, feel free to make the image smaller for
-    // testing purposes.
-    raytracer.render(width, height, eye, view, up, fov, "phong1.bmp");
-
-    // Render it from a different point of view.
-    Point3D eye2(4, 2, 1);
-    Vector3D view2(-4, -2, -6);
+    // Render the scene with full Phong shading
+    raytracer.render(width, height, eye1, view1, up, fov, "phong1.bmp");
     raytracer.render(width, height, eye2, view2, up, fov, "phong2.bmp");
+
+    // Render the scene with shadows
+    raytracer._renderShadows = true;
+    raytracer.render(width, height, eye1, view1, up, fov, "phong_shadow1.bmp");
+    raytracer.render(width, height, eye2, view2, up, fov, "phong_shadow2.bmp");
+    raytracer._renderShadows = false;
 
     // Render without specular component (diffuse)
     gold.specular = Colour();
     jade.specular = Colour();
-    raytracer.render(width, height, eye, view, up, fov, "diffuse1.bmp");
+    raytracer.render(width, height, eye1, view1, up, fov, "diffuse1.bmp");
     raytracer.render(width, height, eye2, view2, up, fov, "diffuse2.bmp");
 
     // Render with only ambient component (scene signature)
@@ -80,7 +83,7 @@ int main(int argc, char* argv[])
     gold.diffuse = Colour();
     jade.ambient = jade.diffuse;
     jade.diffuse = Colour();
-    raytracer.render(width, height, eye, view, up, fov, "sig1.bmp");
+    raytracer.render(width, height, eye1, view1, up, fov, "sig1.bmp");
     raytracer.render(width, height, eye2, view2, up, fov, "sig2.bmp");
 
     return 0;

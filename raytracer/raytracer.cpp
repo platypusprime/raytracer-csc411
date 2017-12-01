@@ -20,6 +20,7 @@
 
 Raytracer::Raytracer() : _lightSource(NULL) {
     _root = new SceneDagNode();
+    _renderShadows = false;
 }
 
 Raytracer::~Raytracer() {
@@ -205,11 +206,14 @@ void Raytracer::computeShading( Ray3D& ray ) {
         // Each lightSource provides its own shading function.
 
         // Shoot a ray directly towards light and check for occlusions
-        Ray3D shadowRay = Ray3D();
-        shadowRay.origin = ray.intersection.point;
-        shadowRay.dir = curLight->light->get_position() - ray.intersection.point;
-        traverseScene(_root, shadowRay);
-        bool isOccluded = !shadowRay.intersection.none;
+        bool isOccluded = false;
+        if (_renderShadows) {
+            Ray3D shadowRay = Ray3D();
+            shadowRay.origin = ray.intersection.point;
+            shadowRay.dir = curLight->light->get_position() - ray.intersection.point;
+            traverseScene(_root, shadowRay);
+            isOccluded = !shadowRay.intersection.none;
+        }
 
         curLight->light->shade(ray, isOccluded);
     }

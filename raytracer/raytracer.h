@@ -101,6 +101,9 @@ public:
     // Apply scaling about a fixed point origin.
     void scale( SceneDagNode* node, Point3D origin, double factor[3] );
 
+    // Public rendering flags
+    bool _renderShadows;
+
 private:
     // Allocates and initializes the pixel buffer for rendering, you
     // could add an interesting background to your scene by modifying
