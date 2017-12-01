@@ -2,9 +2,9 @@
      Starter code for Assignment 3
 
      This code was originally written by Jack Wang for
-		    CSC418, SPRING 2005
+            CSC418, SPRING 2005
 
-		implements scene_object.h
+        implements scene_object.h
 
 ***********************************************************/
 
