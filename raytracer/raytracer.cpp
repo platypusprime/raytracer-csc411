@@ -16,6 +16,7 @@
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
+#include <string>
 
 Raytracer::Raytracer() : _lightSource(NULL) {
     _root = new SceneDagNode();
@@ -250,6 +251,8 @@ Colour Raytracer::shadeRay( Ray3D& ray ) {
 
 void Raytracer::render( int width, int height, Point3D eye, Vector3D view,
         Vector3D up, double fov, std::string fileName ) {
+    std::cout << "Rendering " << fileName << "..." << std::endl;
+
     computeTransforms(_root);
     Matrix4x4 viewToWorld;
     _scrWidth = width;
