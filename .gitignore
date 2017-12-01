@@ -3,8 +3,10 @@
 *.exe
 *.bmp
 *.VC.*
+*.vcxproj*
 
 **/Debug/*
 **/*BAK
+**/.vs
 
 a3_tutorial_notes.txt
