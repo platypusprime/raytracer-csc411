@@ -85,7 +85,7 @@ bool UnitSphere::intersect( Ray3D& ray, const Matrix4x4& worldToModel,
     // calculate intersection (solve quadratic equation for t)
     // (o.x + t * d.x) ^ 2 + (o.y + t * d.y) ^ 2 + (o.z + t * d.z) ^ 2 = 1
     double d_dot_o = dir_model.dot(origin_model_vec);
-    double t_plus_minus = 2 * pow(d_dot_o, 2) - 2 * (origin_model_vec.lengthsq() - 1);
+    double t_plus_minus = pow(d_dot_o, 2) - (origin_model_vec.lengthsq() - 1);
 
     // check for intersection
     if (t_plus_minus < 0) {
